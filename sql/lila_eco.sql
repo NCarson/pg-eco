@@ -4,16 +4,34 @@
 
 DROP TABLE IF EXISTS lila_eco CASCADE;
 CREATE TABLE IF NOT EXISTS lila_eco (
-    eco         VARCHAR(3)
-    ,meta       TEXT
-    ,NAME       TEXT
+     eco        VARCHAR(3)      NOT NULL
+    ,meta       TEXT            NOT NULL
+    ,NAME       TEXT            NOT NULL
     ,var1       TEXT
     ,var2       TEXT
     ,var3       TEXT
-    ,fen        board
+    ,fen        board           NOT NULL
+    ,moves      TEXT
+    ,halfmoves  INT
 );
 
-\COPY lila_eco FROM 'data/lila_eco.dump'
+\COPY lila_eco (eco, meta, NAME, var1, var2, var3, fen) FROM 'data/lila_eco.dump'
+
+DROP TABLE IF EXISTS niklasf_eco CASCADE;
+CREATE TABLE IF NOT EXISTS niklasf_eco (
+     eco        VARCHAR(3)      NOT NULL
+    ,NAME       TEXT            NOT NULL
+    ,moves      TEXT
+    ,halfmoves  INT
+    ,fen        board           NOT NULL
+);
+\COPY niklasf_eco FROM 'data/niklasf_eco.dump'
+
+UPDATE lila_eco
+    SET moves=n.moves , halfmoves=n.halfmoves
+FROM niklasf_eco n
+WHERE lila_eco.fen = n.fen
+;
 
 DROP VIEW IF EXISTS v_opening_canonical;
 CREATE VIEW v_opening_canonical AS
@@ -84,6 +102,26 @@ FROM
 ) T WHERE lila IS NULL
 ;
 
+DROP VIEW IF EXISTS v_niklasf_missing;
+CREATE VIEW v_niklasf_missing AS
+SELECT
+      t.NAME
+    , niklasf
+FROM 
+(
+    SELECT 
+          o.fen niklasf
+        , l.fen AS lila 
+        , o.NAME
+        , l.var1
+        , l.var2
+        , l.var3
+    FROM niklasf_eco o 
+    LEFT JOIN lila_eco l 
+    ON moveless(l.fen)=clear_enpassant(moveless(o.fen))
+) T WHERE lila IS NULL
+;
+
 DROP VIEW IF EXISTS v_scid_lila;
 CREATE VIEW v_scid_lila AS
     SELECT 
@@ -102,6 +140,19 @@ CREATE VIEW v_scid_lila AS
     ON moveless(l.fen)=clear_enpassant(moveless(s.fen))
 ;
 
+DROP VIEW IF EXISTS v_niklasf_lila;
+CREATE VIEW v_niklasf_lila AS
+    SELECT 
+        n.NAME AS niklasf
+        ,l.name  
+            || ', ' || COALESCE(l.var1, '')
+            || ', ' || COALESCE(l.var2, '')
+            || ', ' || COALESCE(l.var3, '') AS lila
+    FROM niklasf_eco n
+    JOIN lila_eco l 
+    ON n.fen = l.fen
+;
+
 /*
 \echo lila COUNT
 SELECT COUNT(*) FROM lila_eco;
@@ -112,7 +163,6 @@ SELECT COUNT(*) FROM (SELECT o.fen scid, l.fen AS lila FROM opening o LEFT JOIN 
 \echo missing FROM scid
 SELECT COUNT(*) FROM (SELECT o.fen scid, l.fen AS lila FROM opening o RIGHT JOIN lila_eco l ON moveless(l.fen)=clear_enpassant(moveless(o.fen))) T WHERE scid IS NULL;
 */
-
 
 
 \echo duplicate fen

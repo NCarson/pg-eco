@@ -3421,4 +3421,5 @@ data = '''
 eco = json.loads(data, encoding='utf-8')
 for line in eco[0]:
     for stuff in eco:
-        print("{c}\t{n}\t{f}\t{m}".format(**stuff))
+        print("{c}\t{n}\t{m}\t{}\t{f} -".format(len(stuff['m'].split()), **stuff))
+    break
