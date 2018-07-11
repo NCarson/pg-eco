@@ -25,10 +25,10 @@ FROM
     SELECT 
         opening ,var1, var2, var3, var4, var5
         ,MIN(halfmoves)
-    FROM opening
+    FROM scid_eco
     GROUP BY opening ,var1, var2, var3, var4, var5
 ) T
-JOIN opening o
+JOIN scid_eco o
     ON  o.opening=T.opening
     AND o.var1 = T.var1
     AND o.var2 = T.var2
@@ -36,7 +36,6 @@ JOIN opening o
     AND o.var4 = T.var4
     AND o.var5 = T.var5
     AND o.halfmoves = T.MIN
-
 ;
 
 DROP VIEW IF EXISTS v_scid_missing;
@@ -103,6 +102,7 @@ CREATE VIEW v_scid_lila AS
     ON moveless(l.fen)=clear_enpassant(moveless(s.fen))
 ;
 
+/*
 \echo lila COUNT
 SELECT COUNT(*) FROM lila_eco;
 \echo scid COUNT
@@ -111,7 +111,14 @@ SELECT COUNT(*) FROM opening;
 SELECT COUNT(*) FROM (SELECT o.fen scid, l.fen AS lila FROM opening o LEFT JOIN lila_eco l ON moveless(l.fen)=clear_enpassant(moveless(o.fen))) T WHERE lila IS NULL;
 \echo missing FROM scid
 SELECT COUNT(*) FROM (SELECT o.fen scid, l.fen AS lila FROM opening o RIGHT JOIN lila_eco l ON moveless(l.fen)=clear_enpassant(moveless(o.fen))) T WHERE scid IS NULL;
+*/
 
+
+
+\echo duplicate fen
+SELECT COUNT, o.* 
+FROM (SELECT COUNT(*), fen FROM lila_eco GROUP BY fen HAVING COUNT(*)>1)t 
+JOIN lila_eco o ON o.fen=t.fen ORDER BY o.fen;
 
 \echo duplicate NULL var1
 SELECT 

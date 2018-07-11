@@ -6,20 +6,19 @@ ifndef DB
 endif
 
 PYTHON = python3
-DATA_DIREC = './data/big/'
-USER='"www-data"'
 PSQL = psql -X -d$(DB)
 
-eco:
-	PAGER='' $(PSQL) -d$(DB) -f sql/eco.sql -v user=$(USER)
+all: lila_data lila scid_data scid
 
-eco_data:
-	python3 script/new_opening.py > data/eco.dump
-	$(PSQL) -d$(DB) -f sql/eco.sql -v user=$(USER)
-
-lila_eco:
+lila_data:
 	$(PYTHON) script/parse_lila.py > data/lila_eco.dump
 
-scid_eco:
+lila:
+	$(PSQL) -f sql/lila_eco.sql -v user=$(USER) > lila.log
+
+scid_data:
 	$(PYTHON) script/parse_lila.py > data/lila_eco.dump
+
+scid: 
+	$(PSQL) -f sql/scid_eco.sql -v user=$(USER) > scid.log
 
