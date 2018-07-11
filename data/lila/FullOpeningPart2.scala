@@ -1,0 +1,1 @@
+/home/lukehand/src/scalachess/src/main/scala/opening/FullOpeningPart2.scala
