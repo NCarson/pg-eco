@@ -8,18 +8,20 @@ endif
 PYTHON = python3
 PSQL = psql -X -d$(DB)
 
-all: niklasf_data lila_data lila scid_data scid
+all: data lila scid
 
-lila_data:
+.PHONY: data
+data:
 	$(PYTHON) script/parse_lila.py > data/lila_eco.dump
-
-lila:
+	$(PYTHON) script/parse_scid.py > data/scid_eco.dump
 	$(PYTHON)  data/niklasf/eco.py > data/niklasf_eco.dump
+	$(PSQL) -f sql/tables.sql
+
+.PHONY: lila
+lila:
 	$(PSQL) -f sql/lila_eco.sql > lila.log
 
-scid_data:
-	$(PYTHON) script/parse_lila.py > data/lila_eco.dump
-
+.PHONY: scid
 scid: 
 	$(PSQL) -f sql/scid_eco.sql -v user=$(USER) > scid.log
 

@@ -1,22 +1,7 @@
 
 \set ON_ERROR_STOP on
 
-drop table if exists scid_eco cascade;
-CREATE TABLE scid_eco (
-      openingid     serial          
-    , eco           VARCHAR(4)      NOT NULL
-    , opening       TEXT            NOT NULL
-    , var1          TEXT 
-    , var2          TEXT 
-    , var3          TEXT 
-    , var4          TEXT 
-    , var5          TEXT 
-    , fen           board           NOT NULL  
-    , moves         TEXT            NOT NULL
-    , halfmoves     INT             NOT NULL
-);
 
-\copy scid_eco (eco, opening, var1, var2, var3, var4, var5, fen, moves, halfmoves) from 'data/scid_eco.dump';
 
 CREATE OR REPLACE FUNCTION opening_suffix(TEXT)
 RETURNs TEXT AS
@@ -66,10 +51,10 @@ $$ LANGUAGE SQL;
 ;
 
 \echo duplicate fen ...
-SELECT * FROM (SELECT COUNT(*), fen FROM scid_eco GROUP BY fen ORDER BY COUNT DESC)t NATURAL JOIN opening WHERE COUNT > 1 ORDER BY fen;/*}}}*/
+SELECT * FROM (SELECT COUNT(*), fen FROM scid_eco GROUP BY fen ORDER BY COUNT DESC)t NATURAL JOIN scid_eco WHERE COUNT > 1 ORDER BY fen;/*}}}*/
 
-\echo duplicate main lines
-SELECT COUNT(*), opening FROM v_opening GROUP BY opening HAVING COUNT(*) > 1;
+--\echo duplicate main lines
+--SELECT COUNT(*), opening FROM v_opening GROUP BY scid_eco HAVING COUNT(*) > 1;
 
 \echo incorrect varations
 SELECT * 
@@ -80,7 +65,7 @@ FROM
     (
         PARTITION BY opening, var1, var2, var3, var4, var5 
         ORDER BY opening, var1, var2, var3, var4, var5, halfmoves
-    ) FROM opening ORDER BY opening, var1, var2, var3, halfmoves
+    ) FROM scid_eco ORDER BY opening, var1, var2, var3, halfmoves
 )t 
 WHERE moves LIKE LAG||'%' = FALSE;
 
@@ -91,5 +76,5 @@ FROM (
     SELECT halfmoves, 
         Lag(halfmoves) over (PARTITION BY opening, var1, var2, var3, var4, var5 ORDER BY opening, var1, var2, var3, var4, var5, halfmoves) as lead
         , eco, opening, var1, var2, var3, var4, var5, moves
-    FROM opening ORDER BY opening, var1, var2, var3, var4, var5, halfmoves
+    FROM scid_eco ORDER BY opening, var1, var2, var3, var4, var5, halfmoves
 )t where lead is not null and halfmoves-lead>1;

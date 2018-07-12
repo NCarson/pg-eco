@@ -1,31 +1,31 @@
 
-
 \set ON_ERROR_STOP on
 
-DROP TABLE IF EXISTS lila_eco CASCADE;
-CREATE TABLE IF NOT EXISTS lila_eco (
-     eco        VARCHAR(3)      NOT NULL
-    ,meta       TEXT            NOT NULL
-    ,NAME       TEXT            NOT NULL
-    ,var1       TEXT
-    ,var2       TEXT
-    ,var3       TEXT
-    ,fen        board           NOT NULL
-    ,moves      TEXT
-    ,halfmoves  INT
-);
 
-\COPY lila_eco (eco, meta, NAME, var1, var2, var3, fen) FROM 'data/lila_eco.dump'
+CREATE OR REPLACE FUNCTION  oPid1(INT) 
+RETURNS INT AS
+$$
+    SELECT e.openingid
+    FROM (SELECT * FROM lila_eco WHERE openingid = $1)t 
+    JOIN lila_eco e 
+    ON e.NAME=t.NAME AND e.var1 IS NULL
+    ORDER BY e.halfmoves
+    LIMIT 1
+$$
+LANGUAGE SQL;
 
-DROP TABLE IF EXISTS niklasf_eco CASCADE;
-CREATE TABLE IF NOT EXISTS niklasf_eco (
-     eco        VARCHAR(3)      NOT NULL
-    ,NAME       TEXT            NOT NULL
-    ,moves      TEXT
-    ,halfmoves  INT
-    ,fen        board           NOT NULL
-);
-\COPY niklasf_eco FROM 'data/niklasf_eco.dump'
+CREATE OR REPLACE FUNCTION  oPid2(INT)
+RETURNS INT AS
+$$
+    SELECT e.openingid
+    FROM (SELECT * FROM lila_eco WHERE openingid = $1)t 
+    JOIN lila_eco e 
+    ON e.NAME=t.NAME AND e.var1=t.var1  AND e.var2 IS NULL
+    ORDER BY e.halfmoves
+    LIMIT 1
+$$
+LANGUAGE SQL;
+
 
 UPDATE lila_eco
     SET moves=n.moves , halfmoves=n.halfmoves
@@ -73,7 +73,7 @@ FROM
         , l.var1
         , l.var2
         , l.var3
-    FROM opening o 
+    FROM scid_Eco o 
     RIGHT JOIN lila_eco l 
     ON moveless(l.fen)=clear_enpassant(moveless(o.fen))
 ) T WHERE scid IS NULL
@@ -96,7 +96,7 @@ FROM
         , o.var1
         , o.var2
         , o.var3
-    FROM opening o 
+    FROM scid_Eco o 
     LEFT JOIN lila_eco l 
     ON moveless(l.fen)=clear_enpassant(moveless(o.fen))
 ) T WHERE lila IS NULL
@@ -135,7 +135,7 @@ CREATE VIEW v_scid_lila AS
             || ', ' || COALESCE(l.var1, '')
             || ', ' || COALESCE(l.var2, '')
             || ', ' || COALESCE(l.var3, '') AS lila
-    FROM opening s
+    FROM scid_Eco s
     JOIN lila_eco l 
     ON moveless(l.fen)=clear_enpassant(moveless(s.fen))
 ;

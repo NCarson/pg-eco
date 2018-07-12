@@ -2259,7 +2259,7 @@ B00b	Reversed Grob (Borg/Basman Defence)	\N	\N	\N	\N	\N	rnbqkbnr/pppppp1p/8/6p1/
 B00b	Reversed Grob (Borg/Basman Defence)	\N	\N	\N	\N	\N	rnbqkbnr/pppppp1p/8/6p1/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2	1.e4 g5 2.d4	3
 B00c	St. George Defence	\N	\N	\N	\N	\N	rnbqkbnr/1ppppppp/p7/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2	1.e4 a6	2
 B00c	St. George Defence	\N	\N	\N	\N	\N	rnbqkbnr/1ppppppp/p7/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2	1.e4 a6 2.d4	3
-B00c	Basman's Creepy-Crawly System (as Black)	\N	\N	\N	\N	\N	rnbqkbnr/1pppppp1/p6p/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3	1.e4 a6 2.d4 h6	4
+B00c	Creepy-Crawly System	\N	\N	\N	\N	\N	rnbqkbnr/1pppppp1/p6p/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3	1.e4 a6 2.d4 h6	4
 B00d	Owen Defence	\N	\N	\N	\N	\N	rnbqkbnr/p1pppppp/1p6/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2	1.e4 b6	2
 B00d	Owen Defence	\N	\N	\N	\N	\N	rnbqkbnr/p1pppppp/1p6/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2	1.e4 b6 2.d4	3
 B00e	Owen Defence	French	\N	\N	\N	\N	rnbqkbnr/p1pp1ppp/1p2p3/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3	1.e4 b6 2.d4 e6	4

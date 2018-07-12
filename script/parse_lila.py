@@ -100,5 +100,5 @@ def parse(f):
     #    print('|' + name + '|')
 
 if __name__ == '__main__':
-    parse(open('data/FullOpeningPart1.scala'))
-    parse(open('data/FullOpeningPart2.scala'))
+    parse(open('data/lila/FullOpeningPart1.scala'))
+    parse(open('data/lila/FullOpeningPart2.scala'))

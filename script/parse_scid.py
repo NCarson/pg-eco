@@ -104,4 +104,4 @@ def flush(ln, eco, name, moves):
         moves, halfmoves))
 
 if __name__ == '__main__':
-    parse(open('data/scid.eco'))
+    parse(open('data/scid/scid.eco'))
