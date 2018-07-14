@@ -33,6 +33,7 @@ FROM niklasf_eco n
 WHERE lila_eco.fen = n.fen
 ;
 
+/*
 DROP VIEW IF EXISTS v_opening_canonical;
 CREATE VIEW v_opening_canonical AS
 SELECT
@@ -152,6 +153,7 @@ CREATE VIEW v_niklasf_lila AS
     JOIN lila_eco l 
     ON n.fen = l.fen
 ;
+*/
 
 /*
 \echo lila COUNT

@@ -43,3 +43,4 @@ CREATE TABLE scid_eco (
     , halfmoves     INT             NOT NULL
 );
 \copy scid_eco (eco, opening, var1, var2, var3, var4, var5, fen, moves, halfmoves) from 'data/scid_eco.dump';
+

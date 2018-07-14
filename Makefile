@@ -19,6 +19,7 @@ data:
 
 .PHONY: lila
 lila:
+	$(PSQL) -f sql/tables.sql
 	$(PSQL) -f sql/lila_eco.sql > lila.log
 
 .PHONY: scid
