@@ -2,19 +2,20 @@
 \set ON_ERROR_STOP on
 
 
-CREATE OR REPLACE FUNCTION  oPid1(INT) 
+CREATE OR REPLACE FUNCTION  opid1(INT) 
 RETURNS INT AS
 $$
     SELECT e.openingid
     FROM (SELECT * FROM lila_eco WHERE openingid = $1)t 
     JOIN lila_eco e 
-    ON e.NAME=t.NAME AND e.var1 IS NULL
+    ON e.NAME=t.NAME 
+    AND e.var1 IS NULL
     ORDER BY e.halfmoves
     LIMIT 1
 $$
 LANGUAGE SQL;
 
-CREATE OR REPLACE FUNCTION  oPid2(INT)
+CREATE OR REPLACE FUNCTION  opid2(INT)
 RETURNS INT AS
 $$
     SELECT e.openingid
@@ -26,6 +27,8 @@ $$
 $$
 LANGUAGE SQL;
 
+UPDATE lila_eco SET opid1 = opid1(openingid);
+UPDATE lila_eco SET opid2 = opid2(openingid);
 
 UPDATE lila_eco
     SET moves=n.moves , halfmoves=n.halfmoves

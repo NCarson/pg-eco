@@ -14,6 +14,8 @@ CREATE TABLE IF NOT EXISTS lila_eco (
     ,fen        board           NOT NULL
     ,moves      TEXT
     ,halfmoves  INT
+    ,opid1      INT
+    ,opid2      INT
 );
 
 \COPY lila_eco (eco, meta, NAME, var1, var2, var3, fen) FROM 'data/lila_eco.dump'
