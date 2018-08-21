@@ -1,9 +1,6 @@
-ifndef DB
-	ifndef PGDATABASE
-	$(error DB is not set and PGDATABASE is not set)
-	endif 
-	DB = $(PGDATABASE)
-endif
+
+USER:=$(shell python3 -c "from config import *; print(WWW_USER)")
+DB:=$(shell python3 -c "from config import *; print(DBNAME)")
 
 PYTHON = python3
 PSQL = psql -X -d$(DB)
